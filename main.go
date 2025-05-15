@@ -2,9 +2,9 @@ package main
 
 import (
     "github.com/gofiber/fiber/v2"
-    "github.com/violasptntels/WorkWise-Backend/config"
-    "github.com/violasptntels/WorkWise-Backend/middleware"
-    "github.com/violasptntels/WorkWise-Backend/routes"
+    "github.com/violasptntels/WorkWise_Backend/config"
+    "github.com/violasptntels/WorkWise_Backend/middleware"
+    "github.com/violasptntels/WorkWise_Backend/routes"
 )
 
 func main() {

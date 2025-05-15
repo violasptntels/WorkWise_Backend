@@ -1,10 +1,10 @@
-module github.com/violasptntels/WorkWise-Backend
+module github.com/violasptntels/WorkWise_Backend
 
 go 1.23.5
 
 require (
 	github.com/gofiber/fiber/v2 v2.52.6
-	go.mongodb.org/mongo-driver v1.12.0
+	go.mongodb.org/mongo-driver v1.17.3
 )
 
 require (

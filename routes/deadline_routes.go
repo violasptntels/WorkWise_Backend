@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/violasptntels/WorkWise-Backend/controllers"
+	"github.com/violasptntels/WorkWise_Backend/controllers"
 )
 
 func DeadlineRoutes(app *fiber.App) {

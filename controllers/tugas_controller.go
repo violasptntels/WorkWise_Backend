@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/violasptntels/WorkWise-Backend/config"
-	"github.com/violasptntels/WorkWise-Backend/models"
+	"github.com/violasptntels/WorkWise_Backend/config"
+	"github.com/violasptntels/WorkWise_Backend/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
