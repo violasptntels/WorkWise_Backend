@@ -7,4 +7,6 @@ type Tugas struct {
 	KaryawanID string `json:"karyawan_id" bson:"karyawan_id"`
 	StatusID   string `json:"status_id" bson:"status_id"`
 	DeadlineID string `json:"deadline_id" bson:"deadline_id"`
+	Deadline    string `json:"deadline"`       // tanggal dari frontend
+
 }
