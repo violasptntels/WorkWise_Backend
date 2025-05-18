@@ -38,6 +38,7 @@ func GetTugasByID(c *fiber.Ctx) error {
 	}
 	return c.JSON(tugas)
 }
+
 // func GetTugasByKaryawanID(c *fiber.Ctx) error {
 //     karyawanID := c.Params("id")
 //     collection := getTugasCollection()
@@ -55,7 +56,6 @@ func GetTugasByID(c *fiber.Ctx) error {
 
 //     return c.JSON(tugas)
 // }
-
 
 func CreateTugas(c *fiber.Ctx) error {
 	tugasCollection := getTugasCollection()
@@ -90,21 +90,25 @@ func CreateTugas(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"message": "Tugas berhasil dibuat"})
 }
 
-
 func UpdateTugas(c *fiber.Ctx) error {
 	collection := getTugasCollection()
 	id := c.Params("id")
+
 	var update models.Tugas
 	if err := c.BodyParser(&update); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": "Data tidak valid"})
 	}
 
-	_, err := collection.UpdateOne(context.Background(),
-		bson.M{"_id": id},
-		bson.M{"$set": update})
+	update.ID = id // penting: pastikan ID di struct ikut diset
+
+	filter := bson.M{"_id": id} // perbaikan disini
+	updateDoc := bson.M{"$set": update}
+
+	_, err := collection.UpdateOne(context.Background(), filter, updateDoc)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Gagal mengupdate tugas"})
 	}
+
 	return c.JSON(fiber.Map{"message": "Tugas berhasil diperbarui"})
 }
 
