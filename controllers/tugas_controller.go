@@ -38,23 +38,23 @@ func GetTugasByID(c *fiber.Ctx) error {
 	}
 	return c.JSON(tugas)
 }
-func GetTugasByKaryawanID(c *fiber.Ctx) error {
-    karyawanID := c.Params("id")
-    collection := getTugasCollection()
+// func GetTugasByKaryawanID(c *fiber.Ctx) error {
+//     karyawanID := c.Params("id")
+//     collection := getTugasCollection()
 
-    // Ambil semua tugas yang memiliki karyawan_id sesuai
-    cursor, err := collection.Find(context.Background(), bson.M{"karyawan_id": karyawanID})
-    if err != nil {
-        return c.Status(500).JSON(fiber.Map{"error": "Gagal mengambil tugas untuk karyawan ini"})
-    }
+//     // Ambil semua tugas yang memiliki karyawan_id sesuai
+//     cursor, err := collection.Find(context.Background(), bson.M{"karyawan_id": karyawanID})
+//     if err != nil {
+//         return c.Status(500).JSON(fiber.Map{"error": "Gagal mengambil tugas untuk karyawan ini"})
+//     }
 
-    var tugas []models.Tugas
-    if err := cursor.All(context.Background(), &tugas); err != nil {
-        return c.Status(500).JSON(fiber.Map{"error": "Gagal parsing data tugas"})
-    }
+//     var tugas []models.Tugas
+//     if err := cursor.All(context.Background(), &tugas); err != nil {
+//         return c.Status(500).JSON(fiber.Map{"error": "Gagal parsing data tugas"})
+//     }
 
-    return c.JSON(tugas)
-}
+//     return c.JSON(tugas)
+// }
 
 
 func CreateTugas(c *fiber.Ctx) error {

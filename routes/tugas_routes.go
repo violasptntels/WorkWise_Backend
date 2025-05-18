@@ -8,8 +8,8 @@ import (
 func TugasRoutes(app *fiber.App) {
 	tugas := app.Group("/tugas")
 
-	// Route yang lebih spesifik harus duluan
-	tugas.Get("/karyawan/:id", controllers.GetTugasByKaryawanID)
+	// // Route yang lebih spesifik harus duluan
+	// tugas.Get("/karyawan/:id", controllers.GetTugasByKaryawanID)
 
 	// Lalu yang lebih umum
 	tugas.Get("/", controllers.GetAllTugas)
