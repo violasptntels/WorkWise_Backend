@@ -71,10 +71,19 @@ func UpdateKaryawan(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"error": "Data tidak valid"})
 	}
 
-	_, err := collection.UpdateOne(context.Background(), bson.M{"_id": id}, bson.M{"$set": bson.M{
-		"nama":  update.Nama,
-		"email": update.Email,
-	}})
+	_, err := collection.UpdateOne(
+		context.Background(),
+		bson.M{"_id": id},
+		bson.M{"$set": bson.M{
+			"nama_lengkap":   update.NamaLengkap,
+			"tanggal_lahir":  update.TanggalLahir,
+			"jenis_kelamin":  update.JenisKelamin,
+			"nomor_telepon":  update.NomorTelepon,
+			"jabatan":        update.Jabatan,
+			"posisi":         update.Posisi,
+			"email":          update.Email,
+		}},
+	)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Gagal mengubah data"})
 	}

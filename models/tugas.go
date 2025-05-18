@@ -2,11 +2,9 @@ package models
 
 type Tugas struct {
 	ID         string `json:"id" bson:"_id"`
-	Nama       string `json:"nama" bson:"nama"`
+	Judul      string `json:"judul" bson:"judul"`
 	Deskripsi  string `json:"deskripsi" bson:"deskripsi"`
 	KaryawanID string `json:"karyawan_id" bson:"karyawan_id"`
-	StatusID   string `json:"status_id" bson:"status_id"`
-	DeadlineID string `json:"deadline_id" bson:"deadline_id"`
-	Deadline    string `json:"deadline"`       // tanggal dari frontend
-
+	Status     string `json:"status" bson:"status"`
+	Deadline   string `json:"deadline" bson:"deadline"` // Format yyyy-mm-dd
 }

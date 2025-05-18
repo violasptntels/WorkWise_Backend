@@ -16,8 +16,6 @@ func main() {
 
     routes.KaryawanRoutes(app)
     routes.TugasRoutes(app)
-    routes.StatusRoutes(app)
-    routes.DeadlineRoutes(app)
 
     app.Listen(":3000")
 }

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -39,10 +38,27 @@ func GetTugasByID(c *fiber.Ctx) error {
 	}
 	return c.JSON(tugas)
 }
+func GetTugasByKaryawanID(c *fiber.Ctx) error {
+    karyawanID := c.Params("id")
+    collection := getTugasCollection()
+
+    // Ambil semua tugas yang memiliki karyawan_id sesuai
+    cursor, err := collection.Find(context.Background(), bson.M{"karyawan_id": karyawanID})
+    if err != nil {
+        return c.Status(500).JSON(fiber.Map{"error": "Gagal mengambil tugas untuk karyawan ini"})
+    }
+
+    var tugas []models.Tugas
+    if err := cursor.All(context.Background(), &tugas); err != nil {
+        return c.Status(500).JSON(fiber.Map{"error": "Gagal parsing data tugas"})
+    }
+
+    return c.JSON(tugas)
+}
+
 
 func CreateTugas(c *fiber.Ctx) error {
 	tugasCollection := getTugasCollection()
-	deadlineCollection := config.DB.Collection("deadline")
 
 	var tugas models.Tugas
 	if err := c.BodyParser(&tugas); err != nil {
@@ -50,43 +66,29 @@ func CreateTugas(c *fiber.Ctx) error {
 	}
 
 	// Validasi ID tugas unik
-	count, _ := tugasCollection.CountDocuments(context.Background(), bson.M{"_id": tugas.ID})
+	count, err := tugasCollection.CountDocuments(context.Background(), bson.M{"_id": tugas.ID})
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Gagal mengecek ID tugas"})
+	}
 	if count > 0 {
 		return c.Status(400).JSON(fiber.Map{"error": "ID tugas sudah digunakan"})
 	}
 
-	// Generate ID deadline otomatis berdasarkan jumlah data deadline saat ini
-	deadlineCount, _ := deadlineCollection.CountDocuments(context.Background(), bson.M{})
-	newDeadlineID := "D%03d"
-	newDeadlineID = fmt.Sprintf(newDeadlineID, deadlineCount+1)
-
-		// Parse dan format tanggal dari frontend
-parsedDate, err := time.Parse("2006-01-02", tugas.Deadline)
-if err != nil {
-	return c.Status(400).JSON(fiber.Map{"error": "Format tanggal tidak valid. Gunakan format yyyy-mm-dd"})
-}
-formattedDate := parsedDate.Format("2006-01-02")
-
-deadline := models.Deadline{
-	ID:      newDeadlineID,
-	Tanggal: formattedDate,
-}
-
-	
-		// Simpan deadline ke database
-		_, err = deadlineCollection.InsertOne(context.Background(), deadline)
-		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Gagal menyimpan deadline"})
-		}
-	
-		// Simpan tugas ke database
-		_, err = tugasCollection.InsertOne(context.Background(), tugas)
-		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Gagal menyimpan tugas"})
-		}
-	
-		return c.JSON(fiber.Map{"message": "Tugas berhasil dibuat"})
+	// Validasi dan format tanggal deadline
+	parsedDate, err := time.Parse("2006-01-02", tugas.Deadline)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Format tanggal tidak valid. Gunakan format yyyy-mm-dd"})
 	}
+	tugas.Deadline = parsedDate.Format("2006-01-02")
+
+	// Simpan tugas ke database
+	_, err = tugasCollection.InsertOne(context.Background(), tugas)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Gagal menyimpan tugas"})
+	}
+
+	return c.JSON(fiber.Map{"message": "Tugas berhasil dibuat"})
+}
 
 
 func UpdateTugas(c *fiber.Ctx) error {
